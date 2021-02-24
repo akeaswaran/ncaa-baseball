@@ -38,6 +38,7 @@ summary <- plays %>%
     mutate(
         substitution = str_extract(description, glue::glue("to ({position_change_match})(\\.| for)")),
         single = grepl(" singled", description, ignore.case = TRUE),
+        hbp = grepl("hit by pitch", description, ignore.case = TRUE),
            walk = grepl(" walked ", description, ignore.case = TRUE),
            balk = grepl(" balk", description, ignore.case = TRUE),
            steal_attempt = grepl(" steal|stole", description, ignore.case = TRUE),
@@ -61,7 +62,7 @@ summary <- plays %>%
            ) %>%
     mutate(lag_is_out = lag(is_out),
            lag_outs = lag(outs),
-           first_base = walk | single | balk | advanced_first,
+           first_base = hbp | walk | single | balk | advanced_first,
            lag_first_base = lag(first_base),
            second_base = double | advanced_second | (single & lag_first_base),
            lag_second_base = lag(second_base),
